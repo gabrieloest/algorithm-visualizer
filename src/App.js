@@ -8,6 +8,7 @@ function App() {
       <Visualizer></Visualizer>
     </div>
   );
+  
 }
 
 export default App;
