@@ -41,9 +41,9 @@ export default class Visualizer extends Component {
         console.log(row + " " + col);
         const newGrid = this.state.grid;
         const n = newGrid[row][col];
-        n.nodeType="node-wall";
+        n.nodeType = "node-wall";
         newGrid[row][col] = n;
-        this.setState({grid: newGrid});
+        this.setState({ grid: newGrid });
     }
 
     animateVisualizer(visitedNodesInOrder, nodesInShortestPathOrder) {
@@ -60,7 +60,7 @@ export default class Visualizer extends Component {
                     'node node-visited';
             }, 10 * i);
         }
-    } 
+    }
 
     animateShortestPath(nodesInShortestPathOrder) {
         for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
@@ -86,7 +86,6 @@ export default class Visualizer extends Component {
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = dfs(grid, startNode, finishNode);
-        console.log(finishNode.previousNode);
         const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
         this.animateVisualizer(visitedNodesInOrder, nodesInShortestPathOrder);
     }
@@ -96,7 +95,6 @@ export default class Visualizer extends Component {
         const startNode = grid[START_NODE_ROW][START_NODE_COL];
         const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
         const visitedNodesInOrder = bfs(grid, startNode, finishNode);
-        console.log(finishNode.previousNode);
         const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
         this.animateVisualizer(visitedNodesInOrder, nodesInShortestPathOrder);
     }
@@ -106,15 +104,18 @@ export default class Visualizer extends Component {
 
         return (
             <>
-                <button onClick={() => this.visualizeDijkstra()}>
-                    Visualize Dijkstra's Algorithm
-                </button>
-                <button onClick={() => this.visualizeDFS()}>
-                    Visualize DFS Algorithm
-                </button>
-                <button onClick={() => this.visualizeBFS()}>
-                    Visualize BFS Algorithm
-                </button>
+                <div>
+                    <button onClick={() => this.visualizeDijkstra()}>
+                        Visualize Dijkstra's Algorithm
+                    </button>
+                    <button onClick={() => this.visualizeDFS()}>
+                        Visualize DFS Algorithm
+                    </button>
+                    <button onClick={() => this.visualizeBFS()}>
+                        Visualize BFS Algorithm
+                    </button>
+                </div>
+
                 <div className="grid">
                     {grid.map((row, rowIdx) => {
                         return (
@@ -177,7 +178,7 @@ const getNodeType = (col, row) => {
 };
 
 function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
 }
