@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import Node from './node/Node';
-import Demo1 from './Demo1';
-import NodeType from './NodeType';
 import { dijkstra, getNodesInShortestPathOrder } from '../algorithms/dijkstra';
 import { dfs } from '../algorithms/dfs';
 import { bfs } from '../algorithms/bfs';
