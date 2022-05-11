@@ -107,12 +107,7 @@ export default class Visualizer extends Component {
     }
 
     render() {
-        const { grid, 
-            selectedOption,
-            startNodeRow,
-            startNodeCol,
-            finishNodeRow,
-            finishNodeCol } = this.state;
+        const { grid } = this.state;
 
         return (
             <>

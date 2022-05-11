@@ -1,11 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
-import Visualizer from './visualizer/Visualizer';
+import PathfinderVisualizer from './pathfinder/visualizer/Visualizer';
+import SortVisualizer from './sort/visualizer/Visualizer';
 
 function App() {
   return (
     <div className="App">
-      <Visualizer></Visualizer>
+      <SortVisualizer></SortVisualizer>
     </div>
   );
   
