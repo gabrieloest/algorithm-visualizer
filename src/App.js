@@ -12,7 +12,6 @@ export default class App extends Component {
   constructor() {
     super();
     this.state = {
-      children: ReactNode,
       index: 0,
       value: 0
     };
