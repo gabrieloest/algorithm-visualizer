@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import Node from './node/Node';
+import Demo1 from './Demo1';
+import NodeType from './NodeType';
 import { dijkstra, getNodesInShortestPathOrder } from '../algorithms/dijkstra';
 import { dfs } from '../algorithms/dfs';
 import { bfs } from '../algorithms/bfs';
 
 import './Visualizer.css';
 
-const START_NODE_ROW = 10;
-const START_NODE_COL = 15;
+const START_NODE_ROW = 1;
+const START_NODE_COL = 1;
 const FINISH_NODE_ROW = 10;
 const FINISH_NODE_COL = 35;
 
@@ -16,7 +18,11 @@ export default class Visualizer extends Component {
         super();
         this.state = {
             grid: [],
-            mouseIsPressed: false,
+            selectedOption: "Start",
+            startNodeRow: 1,
+            startNodeCol: 1,
+            finishNodeRow: 10,
+            finishNodeCol: 35,
         };
     }
 
@@ -25,25 +31,28 @@ export default class Visualizer extends Component {
         this.setState({ grid });
     }
 
-    handleMouseDown(row, col) {
-        //console.log("handleMouseDown");
-    }
-
-    handleMouseEnter(row, col) {
-        //console.log("handleMouseEnter");
-    }
-
-    handleMouseUp() {
-        //console.log("handleMouseUp");
-    }
-
     handleClick(row, col) {
-        console.log(row + " " + col);
         const newGrid = this.state.grid;
-        const n = newGrid[row][col];
-        n.nodeType = "node-wall";
-        newGrid[row][col] = n;
+
+        if(this.state.selectedOption === "Start"){
+            newGrid[this.state.startNodeRow][this.state.startNodeCol].nodeType="";
+            this.setState({ startNodeRow: row, startNodeCol: col});
+        }
+        if(this.state.selectedOption === "End"){
+            newGrid[this.state.finishNodeRow][this.state.finishNodeCol].nodeType="";
+            this.setState({ finishNodeRow: row, finishNodeCol: col});
+        }
+
+        const updatedNode = newGrid[row][col];
+        updatedNode.nodeType = getNodeSelecetedType(this.state.selectedOption);
+        newGrid[row][col] = updatedNode;
         this.setState({ grid: newGrid });
+    }
+
+    onChangeValue = (event) => {
+        this.setState({
+            selectedOption: event.target.value
+          });
     }
 
     animateVisualizer(visitedNodesInOrder, nodesInShortestPathOrder) {
@@ -72,35 +81,40 @@ export default class Visualizer extends Component {
         }
     }
 
-    visualizeDijkstra() {
+    visualizeDijkstra = () => {
         const { grid } = this.state;
-        const startNode = grid[START_NODE_ROW][START_NODE_COL];
-        const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+        const startNode = grid[this.state.startNodeRow][this.state.startNodeCol];
+        const finishNode = grid[this.state.finishNodeRow][this.state.finishNodeCol];
         const visitedNodesInOrder = dijkstra(grid, startNode, finishNode);
         const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
         this.animateVisualizer(visitedNodesInOrder, nodesInShortestPathOrder);
     }
 
-    visualizeDFS() {
+    visualizeDFS = () => {
         const { grid } = this.state;
-        const startNode = grid[START_NODE_ROW][START_NODE_COL];
-        const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+        const startNode = grid[this.state.startNodeRow][this.state.startNodeCol];
+        const finishNode = grid[this.state.finishNodeRow][this.state.finishNodeCol];
         const visitedNodesInOrder = dfs(grid, startNode, finishNode);
         const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
         this.animateVisualizer(visitedNodesInOrder, nodesInShortestPathOrder);
     }
 
-    visualizeBFS() {
+    visualizeBFS = () => {
         const { grid } = this.state;
-        const startNode = grid[START_NODE_ROW][START_NODE_COL];
-        const finishNode = grid[FINISH_NODE_ROW][FINISH_NODE_COL];
+        const startNode = grid[this.state.startNodeRow][this.state.startNodeCol];
+        const finishNode = grid[this.state.finishNodeRow][this.state.finishNodeCol];
         const visitedNodesInOrder = bfs(grid, startNode, finishNode);
         const nodesInShortestPathOrder = getNodesInShortestPathOrder(finishNode);
         this.animateVisualizer(visitedNodesInOrder, nodesInShortestPathOrder);
     }
 
     render() {
-        const { grid, mouseIsPressed } = this.state;
+        const { grid, 
+            selectedOption,
+            startNodeRow,
+            startNodeCol,
+            finishNodeRow,
+            finishNodeCol } = this.state;
 
         return (
             <>
@@ -116,6 +130,20 @@ export default class Visualizer extends Component {
                     </button>
                 </div>
 
+                <div>
+                    <div className="radio">
+                        <input type="radio" value="Start" name="nodeType" checked={this.state.selectedOption === "Start"}
+                            onChange={this.onChangeValue} /> Start
+                        <input type="radio" value="Wall" name="nodeType" checked={this.state.selectedOption === "Wall"}
+                            onChange={this.onChangeValue} /> Wall
+                        <input type="radio" value="End" name="nodeType" checked={this.state.selectedOption === "End"}
+                            onChange={this.onChangeValue} /> End
+                    </div>
+                    <div>
+                        Selected option is : {this.state.selectedOption}
+                    </div>
+                </div>
+
                 <div className="grid">
                     {grid.map((row, rowIdx) => {
                         return (
@@ -127,12 +155,6 @@ export default class Visualizer extends Component {
                                             key={nodeIdx}
                                             col={col}
                                             nodeType={nodeType}
-                                            mouseIsPressed={mouseIsPressed}
-                                            onMouseDown={(row, col) => this.handleMouseDown(row, col)}
-                                            onMouseEnter={(row, col) =>
-                                                this.handleMouseEnter(row, col)
-                                            }
-                                            onMouseUp={() => this.handleMouseUp()}
                                             onClick={() => this.handleClick(row, col)}
                                             row={row}></Node>
                                     );
@@ -174,6 +196,16 @@ const getNodeType = (col, row) => {
         return "node-start";
     if (row === FINISH_NODE_ROW && col === FINISH_NODE_COL)
         return "node-finish";
+    return "";
+};
+
+const getNodeSelecetedType = (selectedOption) => {
+    if (selectedOption === "Start")
+        return "node-start";
+    if (selectedOption === "End")
+        return "node-finish";
+    if (selectedOption === "Wall")
+        return "node-wall";
     return "";
 };
 

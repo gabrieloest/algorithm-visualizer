@@ -9,9 +9,6 @@ export default class Node extends Component {
       col,
       nodeType,
       weight,
-      onMouseDown,
-      onMouseEnter,
-      onMouseUp,
       onClick,
       row,
     } = this.props;
@@ -19,11 +16,7 @@ export default class Node extends Component {
       <div
         id={`node-${row}-${col}`}
         className={`node ${nodeType}`}
-        onMouseDown={() => onMouseDown(row, col)}
-        onMouseEnter={() => onMouseEnter(row, col)}
-        onMouseUp={() => onMouseUp()}
         onClick={() => onClick()}>
-
             {weight}
         </div>
     );
