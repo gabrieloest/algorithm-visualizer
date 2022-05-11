@@ -1,10 +1,9 @@
-import React, { Component, ReactNode, useState } from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import PathfinderVisualizer from './pathfinder/visualizer/Visualizer';
 import SortVisualizer from './sort/visualizer/Visualizer';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import TabPanel from './TabPanel';
 
